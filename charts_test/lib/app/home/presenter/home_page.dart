@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: screenSize.height * 0.1,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -67,6 +67,7 @@ class _HomePageState extends State<HomePage> {
                       sortedItems: sortedSituacoes,
                     ),
                   ),
+                  SizedBox(width: screenSize.width * 0.02),
                   Expanded(
                     child: PieChartComponent(
                       title: "Notas fiscais por fornecedores",

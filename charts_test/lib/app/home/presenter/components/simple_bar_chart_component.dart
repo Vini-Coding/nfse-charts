@@ -34,7 +34,7 @@ class SimpleBarChartComponent extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
@@ -46,8 +46,7 @@ class SimpleBarChartComponent extends StatelessWidget {
         SizedBox(height: screenSize.height * 0.02),
         Container(
           height: screenSize.height * 0.5,
-          padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
-          margin: const EdgeInsets.fromLTRB(6, 8, 6, 8),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),

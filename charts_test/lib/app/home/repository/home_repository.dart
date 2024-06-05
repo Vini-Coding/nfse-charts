@@ -6,7 +6,7 @@ class HomeRepository extends ChangeNotifier {
     Nfse(
       tipo: "Entrada",
       data: DateTime.parse("2024-05-14T12:11:34"),
-      total: 300,
+      total: 1400,
       nomeEmitente: "SUNRISE",
       situacao: "autorizada",
       status: "associar",
@@ -14,7 +14,7 @@ class HomeRepository extends ChangeNotifier {
     Nfse(
       tipo: "Entrada",
       data: DateTime.parse("2024-05-14T12:11:34"),
-      total: 16015.06,
+      total: 4015.06,
       nomeEmitente: "BRF S.A",
       situacao: "atualizar",
       status: "atualizar",
