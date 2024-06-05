@@ -24,7 +24,7 @@ class LineChartComponent extends StatelessWidget {
     }).toList();
 
     final List<String> dates = nfses.map((nfse) {
-      return DateFormat('dd/MM/yyyy').format(nfse.data);
+      return DateFormat('dd/MM/yy').format(nfse.data);
     }).toList();
 
     return Column(
@@ -83,7 +83,9 @@ class LineChartComponent extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
+                              overflow: TextOverflow.ellipsis,
                             ),
+                            maxLines: 2,
                           ),
                         );
                       } else {
@@ -96,22 +98,10 @@ class LineChartComponent extends StatelessWidget {
                 topTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
-                rightTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
               ),
               minX: 0,
               maxX: (spots.length - 1).toDouble(),
               minY: 0,
-              clipData: const FlClipData.none(), // Desativar o corte do gráfico
-              extraLinesData: ExtraLinesData(horizontalLines: [
-                HorizontalLine(
-                  y: spots.map((e) => e.y).reduce((a, b) => a > b ? a : b),
-                  color: Colors.transparent,
-                  strokeWidth: 0,
-                  dashArray: [1],
-                )
-              ]),
             ),
           ),
         ),
