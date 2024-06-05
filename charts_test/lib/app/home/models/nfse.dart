@@ -13,7 +13,5 @@ class Nfse {
     required this.nomeEmitente,
     required this.situacao,
     required this.status,
-  });
-
-  
+  }); 
 }

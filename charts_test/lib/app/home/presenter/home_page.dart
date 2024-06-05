@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, int> fornecedores = {};
+  Map<String, int> situacoes = {};
 
   @override
   void initState() {
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
     for (Nfse nfse in widget.repository.nfses) {
       fornecedores[nfse.nomeEmitente] =
           (fornecedores[nfse.nomeEmitente] ?? 0) + 1;
+      situacoes[nfse.situacao] = (situacoes[nfse.situacao] ?? 0) + 1;
     }
   }
 
@@ -29,6 +31,8 @@ class _HomePageState extends State<HomePage> {
     final Size screenSize = MediaQuery.of(context).size;
     final int nfsesTotalItems = widget.repository.nfses.length;
     final List<MapEntry> sortedFornecedores = fornecedores.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry> sortedSituacoes = situacoes.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return Scaffold(
@@ -43,10 +47,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: PieChartComponent(
-                title: "Notas fiscais por fornecedores",
-                items: fornecedores,
+                title: "Situação das notas fiscais",
+                items: situacoes,
                 totalItems: nfsesTotalItems,
-                sortedItems: sortedFornecedores,
+                sortedItems: sortedSituacoes,
               ),
             ),
             Expanded(
