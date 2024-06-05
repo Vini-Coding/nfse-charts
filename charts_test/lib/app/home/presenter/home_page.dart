@@ -45,8 +45,6 @@ class _HomePageState extends State<HomePage> {
     final List<MapEntry> sortedSituacoes = situacoes.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
-
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
@@ -60,6 +58,26 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Total de notas emitidas:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.repository.nfses.length.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenSize.height * 0.02),
               Row(
                 children: [
                   Expanded(
@@ -83,12 +101,12 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: screenSize.height * 0.02),
               SimpleBarChartComponent(
-                title: "Total por emitentes",
+                title: "Total de pagamentos por emitentes",
                 totalPorEmitente: totalPorEmitente,
               ),
               SizedBox(height: screenSize.height * 0.02),
               LineChartComponent(
-                title: "Total ao longo do tempo",
+                title: "Total de pagamentos ao longo do tempo",
                 nfses: widget.repository.nfses,
               ),
             ],
