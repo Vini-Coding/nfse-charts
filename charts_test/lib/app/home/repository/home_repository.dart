@@ -5,7 +5,7 @@ class HomeRepository extends ChangeNotifier {
   final List<Nfse> nfses = [
     Nfse(
       tipo: "Entrada",
-      data: DateTime(2024, 9, 5, 17, 30),
+      data: DateTime.parse("2024-05-14T12:11:34"),
       total: 300,
       nomeEmitente: "SUNRISE",
       situacao: "autorizada",
@@ -13,7 +13,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime(2024, 4, 5, 17, 30),
+      data: DateTime.parse("2024-05-14T12:11:34"),
       total: 16015.06,
       nomeEmitente: "BRF S.A",
       situacao: "atualizar",
@@ -21,7 +21,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime(2024, 2, 6, 17, 30),
+      data: DateTime.parse("2024-05-14T12:11:34"),
       total: 300,
       nomeEmitente: "SUNRISE",
       situacao: "autorizada",
@@ -29,7 +29,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime(2024, 3, 6, 17, 30),
+      data: DateTime.parse("2024-05-14T12:11:34"),
       total: 803.84,
       nomeEmitente: "COMERCIAL CATARINA LTDA",
       situacao: "autorizada",
@@ -37,7 +37,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime(2024, 3, 6, 17, 30),
+      data: DateTime.parse("2024-05-14T12:11:34"),
       total: 300,
       nomeEmitente: "SUNRISE",
       situacao: "autorizada",
