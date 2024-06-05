@@ -1,0 +1,47 @@
+import 'package:charts_test/app/home/models/nfse.dart';
+import 'package:flutter/cupertino.dart';
+
+class HomeRepository extends ChangeNotifier {
+  final List<Nfse> nfses = [
+    Nfse(
+      tipo: "Entrada",
+      data: DateTime(2024, 9, 5, 17, 30),
+      total: 300,
+      nomeEmitente: "SUNRISE",
+      situacao: "autorizada",
+      status: "associar",
+    ),
+    Nfse(
+      tipo: "Entrada",
+      data: DateTime(2024, 4, 5, 17, 30),
+      total: 16015.06,
+      nomeEmitente: "BRF S.A",
+      situacao: "atualizar",
+      status: "atualizar",
+    ),
+    Nfse(
+      tipo: "Entrada",
+      data: DateTime(2024, 2, 6, 17, 30),
+      total: 300,
+      nomeEmitente: "SUNRISE",
+      situacao: "autorizada",
+      status: "associar",
+    ),
+    Nfse(
+      tipo: "Entrada",
+      data: DateTime(2024, 3, 6, 17, 30),
+      total: 803.84,
+      nomeEmitente: "COMERCIAL CATARINA LTDA",
+      situacao: "autorizada",
+      status: "associar",
+    ),
+    Nfse(
+      tipo: "Entrada",
+      data: DateTime(2024, 3, 6, 17, 30),
+      total: 300,
+      nomeEmitente: "SUNRISE",
+      situacao: "autorizada",
+      status: "associar",
+    ),
+  ];
+}
