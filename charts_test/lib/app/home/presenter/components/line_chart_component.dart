@@ -15,6 +15,7 @@ class LineChartComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    nfses.sort((a, b) => a.data.compareTo(b.data));
 
     final List<FlSpot> spots = nfses.asMap().entries.map((entry) {
       int index = entry.key;
@@ -99,6 +100,18 @@ class LineChartComponent extends StatelessWidget {
                   sideTitles: SideTitles(showTitles: false),
                 ),
               ),
+              minX: 0,
+              maxX: (spots.length - 1).toDouble(),
+              minY: 0,
+              clipData: const FlClipData.none(), // Desativar o corte do gráfico
+              extraLinesData: ExtraLinesData(horizontalLines: [
+                HorizontalLine(
+                  y: spots.map((e) => e.y).reduce((a, b) => a > b ? a : b),
+                  color: Colors.transparent,
+                  strokeWidth: 0,
+                  dashArray: [1],
+                )
+              ]),
             ),
           ),
         ),
