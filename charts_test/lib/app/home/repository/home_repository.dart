@@ -13,7 +13,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime.parse("2024-05-14T12:11:34"),
+      data: DateTime.parse("2024-05-12T10:31:14"),
       total: 4015.06,
       nomeEmitente: "BRF S.A",
       situacao: "atualizar",
@@ -21,7 +21,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime.parse("2024-05-14T12:11:34"),
+      data: DateTime.parse("2024-05-11T09:11:34"),
       total: 300,
       nomeEmitente: "SUNRISE",
       situacao: "autorizada",
@@ -29,7 +29,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime.parse("2024-05-14T12:11:34"),
+      data: DateTime.parse("2024-05-11T09:10:34"),
       total: 803.84,
       nomeEmitente: "COMERCIAL CATARINA LTDA",
       situacao: "autorizada",
@@ -37,7 +37,7 @@ class HomeRepository extends ChangeNotifier {
     ),
     Nfse(
       tipo: "Entrada",
-      data: DateTime.parse("2024-05-14T12:11:34"),
+      data: DateTime.parse("2024-04-29T13:11:34"),
       total: 300,
       nomeEmitente: "SUNRISE",
       situacao: "autorizada",

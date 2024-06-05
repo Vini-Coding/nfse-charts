@@ -3,6 +3,7 @@ import 'package:charts_test/app/home/presenter/components/pie_chart_component.da
 import 'package:charts_test/app/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 
+import 'components/line_chart_component.dart';
 import 'components/simple_bar_chart_component.dart';
 
 class HomePage extends StatefulWidget {
@@ -44,6 +45,8 @@ class _HomePageState extends State<HomePage> {
     final List<MapEntry> sortedSituacoes = situacoes.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
+
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
@@ -82,6 +85,11 @@ class _HomePageState extends State<HomePage> {
               SimpleBarChartComponent(
                 title: "Total por emitentes",
                 totalPorEmitente: totalPorEmitente,
+              ),
+              SizedBox(height: screenSize.height * 0.02),
+              LineChartComponent(
+                title: "Total ao longo do tempo",
+                nfses: widget.repository.nfses,
               ),
             ],
           ),
