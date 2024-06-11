@@ -20,7 +20,7 @@ class LineChartComponent extends StatelessWidget {
     final List<FlSpot> spots = nfses.asMap().entries.map((entry) {
       int index = entry.key;
       Nfse nfse = entry.value;
-      return FlSpot(index.toDouble(), nfse.total);
+      return FlSpot(index.toDouble(), nfse.totalNf);
     }).toList();
 
     final List<String> dates = nfses.map((nfse) {

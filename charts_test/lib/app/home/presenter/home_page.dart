@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
       // BAR CHARTS
       totalPorEmitente[nfse.nomeEmitente] =
-          (totalPorEmitente[nfse.nomeEmitente] ?? 0) + nfse.total;
+          (totalPorEmitente[nfse.nomeEmitente] ?? 0) + nfse.totalNf;
     }
   }
 
