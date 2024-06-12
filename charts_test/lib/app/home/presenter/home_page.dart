@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final List<Nfse> nfses;
   final Map<String, int> fornecedores = {};
   final Map<String, int> situacoes = {};
   final Map<String, double> totalPorEmitente = {};
@@ -23,7 +24,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    for (Nfse nfse in widget.repository.nfses) {
+    Map<String, dynamic> jsonData = widget.repository.getData();
+    Nfses nfsesData = Nfses.fromMap(jsonData);
+
+    nfses = nfsesData.nfsesList;
+
+    for (Nfse nfse in nfses) {
       //PIE CHARTS
       fornecedores[nfse.nomeEmitente] =
           (fornecedores[nfse.nomeEmitente] ?? 0) + 1;
@@ -69,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Text(
-                    widget.repository.nfses.length.toString(),
+                    nfses.length.toString(),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -107,7 +113,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: screenSize.height * 0.02),
               LineChartComponent(
                 title: "Total de pagamentos ao longo do tempo",
-                nfses: widget.repository.nfses,
+                nfses: nfses,
               ),
             ],
           ),

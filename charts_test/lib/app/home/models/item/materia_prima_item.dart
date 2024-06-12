@@ -3,27 +3,26 @@ import 'dart:convert';
 
 import 'package:charts_test/app/home/models/item/pessoa_materia_prima.dart';
 
-class MateriaPrimaItem {
-    String id;
-    String nome;
-    String sku;
-    String ean;
-    String ncm;
-    String preco;
-    String unidade;
-    PessoaMateriaPrima pessoaId;
+class MateriaPrimaId {
+  final String id;
+  final String nome;
+  final String sku;
+  final String ean;
+  final String ncm;
+  final String preco;
+  final String unidade;
+  final MateriaPrimaIdPessoaId pessoaId;
 
-    MateriaPrimaItem({
-        required this.id,
-        required this.nome,
-        required this.sku,
-        required this.ean,
-        required this.ncm,
-        required this.preco,
-        required this.unidade,
-        required this.pessoaId,
-    });
-
+  MateriaPrimaId({
+    required this.id,
+    required this.nome,
+    required this.sku,
+    required this.ean,
+    required this.ncm,
+    required this.preco,
+    required this.unidade,
+    required this.pessoaId,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -34,12 +33,12 @@ class MateriaPrimaItem {
       'ncm': ncm,
       'preco': preco,
       'unidade': unidade,
-      'pessoaId': pessoaId.toMap(),
+      'pessoa_id': pessoaId.toMap(),
     };
   }
 
-  factory MateriaPrimaItem.fromMap(Map<String, dynamic> map) {
-    return MateriaPrimaItem(
+  factory MateriaPrimaId.fromMap(Map<String, dynamic> map) {
+    return MateriaPrimaId(
       id: map['id'] as String,
       nome: map['nome'] as String,
       sku: map['sku'] as String,
@@ -47,11 +46,12 @@ class MateriaPrimaItem {
       ncm: map['ncm'] as String,
       preco: map['preco'] as String,
       unidade: map['unidade'] as String,
-      pessoaId: PessoaMateriaPrima.fromMap(map['pessoaId'] as Map<String,dynamic>),
+      pessoaId: MateriaPrimaIdPessoaId.fromMap(map['pessoa_id'] as Map<String,dynamic>),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory MateriaPrimaItem.fromJson(String source) => MateriaPrimaItem.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory MateriaPrimaId.fromJson(String source) => MateriaPrimaId.fromMap(json.decode(source) as Map<String, dynamic>);
 }
+

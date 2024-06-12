@@ -4,20 +4,20 @@ import 'dart:convert';
 import 'package:charts_test/app/home/models/item/materia_prima_item.dart';
 
 class NfseItem {
-  String id;
-  String quantidade;
-  String valorUnitario;
-  String valorTotal;
-  dynamic valorDesconto;
-  dynamic valorFrete;
-  dynamic valorIpi;
-  String unidade;
-  dynamic quantidadeConversao;
-  bool cancelado;
-  dynamic fatorConversao;
-  MateriaPrimaItem materiaPrimaId;
-  dynamic conversaoId;
-  dynamic produtoId;
+  final String id;
+  final String quantidade;
+  final String valorUnitario;
+  final String valorTotal;
+  final dynamic valorDesconto;
+  final dynamic valorFrete;
+  final dynamic valorIpi;
+  final String unidade;
+  final dynamic quantidadeConversao;
+  final bool cancelado;
+  final dynamic fatorConversao;
+  final MateriaPrimaId materiaPrimaId;
+  final dynamic conversaoId;
+  final dynamic produtoId;
 
   NfseItem({
     required this.id,
@@ -40,18 +40,18 @@ class NfseItem {
     return <String, dynamic>{
       'id': id,
       'quantidade': quantidade,
-      'valorUnitario': valorUnitario,
-      'valorTotal': valorTotal,
-      'valorDesconto': valorDesconto,
-      'valorFrete': valorFrete,
-      'valorIpi': valorIpi,
+      'valor_unitario': valorUnitario,
+      'valor_total': valorTotal,
+      'valor_desconto': valorDesconto,
+      'valor_frete': valorFrete,
+      'valor_ipi': valorIpi,
       'unidade': unidade,
-      'quantidadeConversao': quantidadeConversao,
+      'quantidade_conversao': quantidadeConversao,
       'cancelado': cancelado,
-      'fatorConversao': fatorConversao,
-      'materiaPrimaId': materiaPrimaId.toMap(),
-      'conversaoId': conversaoId,
-      'produtoId': produtoId,
+      'fator_conversao': fatorConversao,
+      'materia_prima_id': materiaPrimaId.toMap(),
+      'conversao_id': conversaoId,
+      'produto_id': produtoId,
     };
   }
 
@@ -59,18 +59,18 @@ class NfseItem {
     return NfseItem(
       id: map['id'] as String,
       quantidade: map['quantidade'] as String,
-      valorUnitario: map['valorUnitario'] as String,
-      valorTotal: map['valorTotal'] as String,
-      valorDesconto: map['valorDesconto'] as dynamic,
-      valorFrete: map['valorFrete'] as dynamic,
-      valorIpi: map['valorIpi'] as dynamic,
+      valorUnitario: map['valor_unitario'] as String,
+      valorTotal: map['valor_total'] as String,
+      valorDesconto: map['valor_desconto'] as dynamic,
+      valorFrete: map['valor_frete'] as dynamic,
+      valorIpi: map['valor_ipi'] as dynamic,
       unidade: map['unidade'] as String,
-      quantidadeConversao: map['quantidadeConversao'] as dynamic,
+      quantidadeConversao: map['quantidade_conversao'] as dynamic,
       cancelado: map['cancelado'] as bool,
-      fatorConversao: map['fatorConversao'] as dynamic,
-      materiaPrimaId: MateriaPrimaItem.fromMap(map['materiaPrimaId'] as Map<String,dynamic>),
-      conversaoId: map['conversaoId'] as dynamic,
-      produtoId: map['produtoId'] as dynamic,
+      fatorConversao: map['fator_conversao'] as dynamic,
+      materiaPrimaId: MateriaPrimaId.fromMap(map['materia_prima_id'] as Map<String,dynamic>),
+      conversaoId: map['conversao_id'] as dynamic,
+      produtoId: map['produto_id'] as dynamic,
     );
   }
 

@@ -2,9 +2,9 @@
 import 'dart:convert';
 
 class NfsePgto {
-  String id;
-  String formaPgto;
-  String valorPgto;
+  final String id;
+  final String formaPgto;
+  final String valorPgto;
 
   NfsePgto({
     required this.id,
@@ -15,16 +15,16 @@ class NfsePgto {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'formaPgto': formaPgto,
-      'valorPgto': valorPgto,
+      'forma_pgto': formaPgto,
+      'valor_pgto': valorPgto,
     };
   }
 
   factory NfsePgto.fromMap(Map<String, dynamic> map) {
     return NfsePgto(
       id: map['id'] as String,
-      formaPgto: map['formaPgto'] as String,
-      valorPgto: map['valorPgto'] as String,
+      formaPgto: map['forma_pgto'] as String,
+      valorPgto: map['valor_pgto'] as String,
     );
   }
 
