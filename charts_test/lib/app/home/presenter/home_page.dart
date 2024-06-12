@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final int nfsesTotalItems = widget.repository.nfses.length;
+    final int nfsesTotalItems = nfses.length;
 
     final List<MapEntry> sortedFornecedores = fornecedores.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));

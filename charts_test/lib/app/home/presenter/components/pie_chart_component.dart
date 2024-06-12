@@ -61,7 +61,7 @@ class PieChartComponent extends StatelessWidget {
                 child: PieChart(
                   PieChartData(
                     sections: pieSections,
-                    centerSpaceRadius: 30,
+                    centerSpaceRadius: 20,
                     sectionsSpace: 2,
                     borderData: FlBorderData(show: false),
                   ),
@@ -88,7 +88,8 @@ class PieChartComponent extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text('${entry.key.toString().toUpperCase()} (${entry.value})'),
+                      Text(
+                          '${entry.key.toString().toUpperCase()} (${entry.value})'),
                     ],
                   );
                 }).toList(),
