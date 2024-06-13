@@ -1,9 +1,4 @@
-import 'package:charts_test/app/home/models/nfse.dart';
-import 'package:flutter/cupertino.dart';
-
-class HomeRepository extends ChangeNotifier {
-  final List<Nfse> nfses = [];
-
+class HomeRepository {
   Map<String, dynamic> getData() {
     return {
       "data": [

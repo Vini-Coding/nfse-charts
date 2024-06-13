@@ -11,7 +11,7 @@ class InfoCardComponent extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
-    this.width =  0.2,
+    this.width =  0.15,
   });
 
   @override
@@ -56,7 +56,7 @@ class InfoCardComponent extends StatelessWidget {
                   Text(
                     subtitle,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 16,
                       fontFamily: 'Nunito',
                       height: 1,
                       fontWeight: FontWeight.w700,
