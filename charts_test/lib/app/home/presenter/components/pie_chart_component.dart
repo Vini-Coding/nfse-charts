@@ -89,7 +89,14 @@ class PieChartComponent extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                          '${entry.key.toString().toUpperCase()} (${entry.value})'),
+                        '${entry.key.toString().toUpperCase()} (${entry.value})',
+                        style: const TextStyle(
+                          fontFamily: "Nunito",
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF151515),
+                        ),
+                      ),
                     ],
                   );
                 }).toList(),

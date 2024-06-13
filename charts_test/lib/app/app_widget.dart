@@ -11,7 +11,9 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       title: 'NFSEs Charts',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(),
+      theme: ThemeData(
+        primaryColor: const Color(0xFF00935F),
+      ),
       home: HomePage(
         store: context.watch<HomeStore>(),
       ),

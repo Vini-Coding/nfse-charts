@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final store = widget.store;
-    final int nfsesTotalItems = store.nfses.length;
+    final int nfsesTotalItems = store.filteredNfses.length;
 
     return Scaffold(
       backgroundColor: const Color(0xffF1F1F1),
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(width: screenSize.width * 0.01),
                   InfoCardComponent(
                     title: "Notas emitidas:",
-                    subtitle: store.nfses.length.toString(),
+                    subtitle: store.filteredNfses.length.toString(),
                     icon: FontAwesomeIcons.noteSticky,
                   ),
                   SizedBox(width: screenSize.width * 0.01),
@@ -102,9 +102,37 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(height: screenSize.height * 0.02),
+              Row(
+                children: [
+                  Visibility(
+                    visible: store.currentCentroCusto == "TODOS",
+                    child: Expanded(
+                      child: PieChartComponent(
+                        title: "Notas fiscais por Centros de Custo",
+                        items: store.centrosCusto,
+                        totalItems: nfsesTotalItems,
+                        sortedItems: store.sortedCentroCusto,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: store.currentCentroCusto == "TODOS",
+                    child: SizedBox(width: screenSize.width * 0.02),
+                  ),
+                  Expanded(
+                    child: PieChartComponent(
+                      title: "Notas fiscais por fornecedores",
+                      items: store.fornecedores,
+                      totalItems: nfsesTotalItems,
+                      sortedItems: store.sortedFornecedores,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenSize.height * 0.02),
               LineChartComponent(
                 title: "Evolução de compras por período",
-                nfses: store.nfses,
+                nfses: store.filteredNfses,
                 dates: store.dates,
               ),
               SizedBox(height: screenSize.height * 0.02),
@@ -135,27 +163,6 @@ class _HomePageState extends State<HomePage> {
                 totalPorEmitente: store.totalPorEmitente,
               ),
               SizedBox(height: screenSize.height * 0.02),
-              Row(
-                children: [
-                  Expanded(
-                    child: PieChartComponent(
-                      title: "Notas fiscais por empresa",
-                      items: store.centrosCusto,
-                      totalItems: nfsesTotalItems,
-                      sortedItems: store.sortedCentroCusto,
-                    ),
-                  ),
-                  SizedBox(width: screenSize.width * 0.02),
-                  Expanded(
-                    child: PieChartComponent(
-                      title: "Notas fiscais por fornecedores",
-                      items: store.fornecedores,
-                      totalItems: nfsesTotalItems,
-                      sortedItems: store.sortedFornecedores,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

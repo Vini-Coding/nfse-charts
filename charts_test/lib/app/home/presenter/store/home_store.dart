@@ -39,7 +39,13 @@ class HomeStore extends ChangeNotifier {
     nfses = nfsesData.nfsesList;
     filteredNfses = nfses;
 
-    for (Nfse nfse in nfses) {
+    updateChartsMaps();
+    sortLists();
+    currentPeriodoSelection = "até ${dates.last}";
+  }
+
+  void updateChartsMaps() {
+    for (Nfse nfse in filteredNfses) {
       //PIE CHARTS
       fornecedores[nfse.nomeEmitente] =
           (fornecedores[nfse.nomeEmitente] ?? 0) + 1;
@@ -52,8 +58,6 @@ class HomeStore extends ChangeNotifier {
       totalPorEmitente[nfse.nomeEmitente] =
           (totalPorEmitente[nfse.nomeEmitente] ?? 0) + nfse.totalNf;
     }
-    sortLists();
-    currentPeriodoSelection = "até ${dates.last}";
   }
 
   void sortLists() {
@@ -76,22 +80,31 @@ class HomeStore extends ChangeNotifier {
         dates.add(formattedDate);
       }
     }
+  }
 
-    dates.sort(
-      (a, b) => DateFormat('dd/MM/yy').parse(a).compareTo(
-            DateFormat('dd/MM/yy').parse(b),
-          ),
-    );
+  void clearLists() {
+    fornecedores.clear();
+    sortedSituacoes.clear();
+    sortedCentroCusto.clear();
+    sortedStatus.clear();
+    centrosCustoSelection.clear();
+    dates.clear();
   }
 
   void filtrarPorCentroDeCusto(String centroCusto) {
     if (centroCusto == "TODOS") {
       filteredNfses = nfses;
+      clearLists();
+      updateChartsMaps();
+      sortLists();
     } else {
       currentCentroCusto = centroCusto;
+      clearLists();
       filteredNfses = nfses.where((nfse) {
         return nfse.centroCustoId.fantasia == centroCusto;
       }).toList();
+      updateChartsMaps();
+      sortLists();
     }
     notifyListeners();
   }

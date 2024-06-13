@@ -1492,7 +1492,7 @@ class HomeRepository {
           "centro_custo_id": {
             "id": "2a3666bb-6d22-47b9-a795-7c48e4a339f3",
             "razao": "PIZZARIA DA PRAIA LTDA",
-            "fantasia": "PIZZARIA DA PRAIA LTDA",
+            "fantasia": "DOIDO DA PRAIA LTDA",
             "cnpj": "29419148000147",
             "endereco": {
               "cep": "29055620",
