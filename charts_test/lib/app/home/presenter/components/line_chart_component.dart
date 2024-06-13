@@ -24,7 +24,6 @@ class LineChartComponent extends StatelessWidget {
       return FlSpot(index.toDouble(), nfse.totalNf);
     }).toList();
 
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +32,9 @@ class LineChartComponent extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Nunito',
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF151515),
           ),
         ),
         SizedBox(height: screenSize.height * 0.02),

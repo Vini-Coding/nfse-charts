@@ -42,8 +42,10 @@ class PieChartComponent extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
+            fontFamily: "Nunito",
             fontSize: 16,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF151515),
           ),
         ),
         SizedBox(height: screenSize.height * 0.02),

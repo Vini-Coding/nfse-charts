@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   InfoCardComponent(
                     title: "Total gasto:",
                     subtitle:
-                        "R\$ ${222000.000.toStringAsFixed(2).replaceAll('.', ',')}",
+                        "R\$ ${store.totalGasto.toStringAsFixed(2).replaceAll('.', ',')}",
                     icon: FontAwesomeIcons.coins,
                   ),
                 ],
@@ -130,12 +130,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(height: screenSize.height * 0.02),
-              LineChartComponent(
-                title: "Evolução de compras por período",
-                nfses: store.filteredNfses,
-                dates: store.dates,
-              ),
-              SizedBox(height: screenSize.height * 0.02),
               Row(
                 children: [
                   Expanded(
@@ -156,6 +150,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
+              ),
+              SizedBox(height: screenSize.height * 0.02),
+              LineChartComponent(
+                title: "Evolução de compras por período",
+                nfses: store.filteredNfses,
+                dates: store.dates,
               ),
               SizedBox(height: screenSize.height * 0.02),
               SimpleBarChartComponent(

@@ -20,6 +20,7 @@ class HomeStore extends ChangeNotifier {
   late List<MapEntry> sortedSituacoes;
   late List<MapEntry> sortedCentroCusto;
   late List<MapEntry> sortedStatus;
+  double totalGasto = 0;
   List<String> dates = [];
   String currentCentroCusto = "TODOS";
   List<String> centrosCustoSelection = ["TODOS"];
@@ -41,7 +42,15 @@ class HomeStore extends ChangeNotifier {
 
     updateChartsMaps();
     sortLists();
+    updateTotalGasto();
     currentPeriodoSelection = "até ${dates.last}";
+  }
+
+  void updateTotalGasto() {
+    totalGasto = 0;
+    for (var nfse in filteredNfses) {
+      totalGasto = totalGasto + nfse.totalNf;
+    }
   }
 
   void updateChartsMaps() {
@@ -84,19 +93,25 @@ class HomeStore extends ChangeNotifier {
 
   void clearLists() {
     fornecedores.clear();
+    situacoes.clear();
+    status.clear();
+    totalPorEmitente.clear();
+    sortedFornecedores.clear();
     sortedSituacoes.clear();
     sortedCentroCusto.clear();
     sortedStatus.clear();
-    centrosCustoSelection.clear();
     dates.clear();
   }
 
   void filtrarPorCentroDeCusto(String centroCusto) {
     if (centroCusto == "TODOS") {
+      currentCentroCusto = centroCusto;
       filteredNfses = nfses;
       clearLists();
+      centrosCusto.clear();
       updateChartsMaps();
       sortLists();
+      updateTotalGasto();
     } else {
       currentCentroCusto = centroCusto;
       clearLists();
@@ -105,6 +120,7 @@ class HomeStore extends ChangeNotifier {
       }).toList();
       updateChartsMaps();
       sortLists();
+      updateTotalGasto();
     }
     notifyListeners();
   }

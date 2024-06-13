@@ -32,6 +32,15 @@ class SimpleBarChartComponent extends StatelessWidget {
       index++;
     });
 
+    String truncateToThreeWords(String text) {
+      List<String> words = text.split(' ');
+      if (words.length > 3) {
+        words = words.sublist(0, 3);
+      }
+
+      return words.join(' ');
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +49,9 @@ class SimpleBarChartComponent extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Nunito',
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF151515),
           ),
         ),
         SizedBox(height: screenSize.height * 0.02),
@@ -64,14 +75,19 @@ class SimpleBarChartComponent extends StatelessWidget {
                       if (index >= 0 && index < totalPorEmitente.length) {
                         final emitente = totalPorEmitente.keys.elementAt(index);
                         return SideTitleWidget(
+                          angle: 0.2,
+                          space: 2,
                           axisSide: meta.axisSide,
                           child: Text(
-                            emitente,
+                            truncateToThreeWords(emitente),
                             style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                              fontSize: 8,
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF151515),
+                              overflow: TextOverflow.ellipsis,
                             ),
+                            maxLines: 1,
                           ),
                         );
                       } else {
