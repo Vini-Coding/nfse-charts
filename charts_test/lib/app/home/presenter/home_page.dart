@@ -1,6 +1,5 @@
 import 'package:charts_test/app/home/presenter/components/pie_chart_component.dart';
 import 'package:charts_test/app/home/presenter/store/home_store.dart';
-import 'package:charts_test/app/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,8 +9,7 @@ import 'components/simple_bar_chart_component.dart';
 
 class HomePage extends StatefulWidget {
   final HomeStore store;
-  final HomeRepository repository;
-  const HomePage({super.key, required this.store, required this.repository});
+  const HomePage({super.key, required this.store});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,22 +19,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    widget.store.init(widget.repository);
+    widget.store.init();
   }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final int nfsesTotalItems = widget.store.nfses.length;
-
-    final List<MapEntry> sortedFornecedores = widget.store.fornecedores.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    final List<MapEntry> sortedSituacoes = widget.store.situacoes.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    final List<MapEntry> sortedCentroCusto = widget.store.centrosCusto.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    final List<MapEntry> sortedStatus = widget.store.status.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final store = widget.store;
+    final int nfsesTotalItems = store.nfses.length;
 
     return Scaffold(
       backgroundColor: const Color(0xffF1F1F1),
@@ -77,20 +67,29 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   InfoCardComponent(
                     title: "Centro de custo:",
-                    subtitle: sortedCentroCusto.first.key,
+                    subtitle: store.currentCentroCusto,
                     icon: FontAwesomeIcons.buildingUser,
                     width: 0.25,
+                    isSelectCard: true,
+                    selectOptions: store.centrosCustoSelection,
+                    onSelect: (value) {
+                      store.filtrarPorCentroDeCusto(value);
+                    },
                   ),
                   SizedBox(width: screenSize.width * 0.01),
                   InfoCardComponent(
                     title: "Período:",
-                    subtitle: widget.store.nfses.length.toString(),
+                    subtitle: store.currentPeriodoSelection,
                     icon: FontAwesomeIcons.calendar,
+                    width: 0.25,
+                    isSelectCard: true,
+                    selectOptions: store.periodoSelection,
+                    onSelect: (value) {},
                   ),
                   SizedBox(width: screenSize.width * 0.01),
                   InfoCardComponent(
                     title: "Notas emitidas:",
-                    subtitle: widget.store.nfses.length.toString(),
+                    subtitle: store.nfses.length.toString(),
                     icon: FontAwesomeIcons.noteSticky,
                   ),
                   SizedBox(width: screenSize.width * 0.01),
@@ -105,7 +104,8 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: screenSize.height * 0.02),
               LineChartComponent(
                 title: "Evolução de compras por período",
-                nfses: widget.store.nfses,
+                nfses: store.nfses,
+                dates: store.dates,
               ),
               SizedBox(height: screenSize.height * 0.02),
               Row(
@@ -113,18 +113,18 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: PieChartComponent(
                       title: "Situação das notas fiscais",
-                      items: widget.store.situacoes,
+                      items: store.situacoes,
                       totalItems: nfsesTotalItems,
-                      sortedItems: sortedSituacoes,
+                      sortedItems: store.sortedSituacoes,
                     ),
                   ),
                   SizedBox(width: screenSize.width * 0.02),
                   Expanded(
                     child: PieChartComponent(
                       title: "Status das nostas fiscais",
-                      items: widget.store.status,
+                      items: store.status,
                       totalItems: nfsesTotalItems,
-                      sortedItems: sortedStatus,
+                      sortedItems: store.sortedStatus,
                     ),
                   ),
                 ],
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: screenSize.height * 0.02),
               SimpleBarChartComponent(
                 title: "Total de pagamentos por fornecedores",
-                totalPorEmitente: widget.store.totalPorEmitente,
+                totalPorEmitente: store.totalPorEmitente,
               ),
               SizedBox(height: screenSize.height * 0.02),
               Row(
@@ -140,18 +140,18 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: PieChartComponent(
                       title: "Notas fiscais por empresa",
-                      items: widget.store.centrosCusto,
+                      items: store.centrosCusto,
                       totalItems: nfsesTotalItems,
-                      sortedItems: sortedCentroCusto,
+                      sortedItems: store.sortedCentroCusto,
                     ),
                   ),
                   SizedBox(width: screenSize.width * 0.02),
                   Expanded(
                     child: PieChartComponent(
                       title: "Notas fiscais por fornecedores",
-                      items: widget.store.fornecedores,
+                      items: store.fornecedores,
                       totalItems: nfsesTotalItems,
-                      sortedItems: sortedFornecedores,
+                      sortedItems: store.sortedFornecedores,
                     ),
                   ),
                 ],

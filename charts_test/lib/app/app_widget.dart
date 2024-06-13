@@ -1,6 +1,5 @@
 import 'package:charts_test/app/home/presenter/home_page.dart';
 import 'package:charts_test/app/home/presenter/store/home_store.dart';
-import 'package:charts_test/app/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,8 +13,7 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
       home: HomePage(
-        store: Provider.of<HomeStore>(context),
-        repository: Provider.of<HomeRepository>(context),
+        store: context.watch<HomeStore>(),
       ),
     );
   }

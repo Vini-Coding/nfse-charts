@@ -1,15 +1,16 @@
 import 'package:charts_test/app/home/models/nfse.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class LineChartComponent extends StatelessWidget {
   final String title;
   final List<dynamic> nfses;
+  final List<String> dates;
   const LineChartComponent({
     super.key,
     required this.title,
     required this.nfses,
+    required this.dates,
   });
 
   @override
@@ -23,9 +24,6 @@ class LineChartComponent extends StatelessWidget {
       return FlSpot(index.toDouble(), nfse.totalNf);
     }).toList();
 
-    final List<String> dates = nfses.map((nfse) {
-      return DateFormat('dd/MM/yy').format(nfse.data);
-    }).toList();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

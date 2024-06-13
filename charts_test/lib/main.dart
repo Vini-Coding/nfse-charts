@@ -9,7 +9,11 @@ void main() {
     MultiProvider(
       providers: [
         Provider<HomeRepository>(create: (context) => HomeRepository()),
-        ChangeNotifierProvider<HomeStore>(create: (context) => HomeStore()),
+        ChangeNotifierProvider<HomeStore>(
+          create: (context) => HomeStore(
+            repository: context.read<HomeRepository>()
+          ),
+        ),
       ],
       child: const AppWidget(),
     ),
