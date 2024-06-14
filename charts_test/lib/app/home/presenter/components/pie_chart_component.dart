@@ -18,22 +18,24 @@ class PieChartComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
-    final List<PieChartSectionData> pieSections = items.entries.map((entry) {
-      final percentage = (entry.value / totalItems) * 100;
+    final List<PieChartSectionData> pieSections = totalItems != 0
+        ? items.entries.map((entry) {
+            final percentage = (entry.value / totalItems) * 100;
 
-      return PieChartSectionData(
-        color: Colors.primaries[
-            items.keys.toList().indexOf(entry.key) % Colors.primaries.length],
-        value: entry.value.toDouble(),
-        title: "${percentage.round()}%",
-        radius: 100,
-        titleStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      );
-    }).toList();
+            return PieChartSectionData(
+              color: Colors.primaries[items.keys.toList().indexOf(entry.key) %
+                  Colors.primaries.length],
+              value: entry.value.toDouble(),
+              title: "${percentage.round()}%",
+              radius: 100,
+              titleStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            );
+          }).toList()
+        : [];
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -56,54 +58,70 @@ class PieChartComponent extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: PieChart(
-                  PieChartData(
-                    sections: pieSections,
-                    centerSpaceRadius: 20,
-                    sectionsSpace: 2,
-                    borderData: FlBorderData(show: false),
-                  ),
-                  swapAnimationDuration: const Duration(milliseconds: 150),
-                  swapAnimationCurve: Curves.linear, //
+          child: Visibility(
+            visible: totalItems != 0,
+            replacement: const Center(
+              child: Text(
+                "Sem gráficos para esse período",
+                style: TextStyle(
+                  fontFamily: "Nunito",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF00935F),
+                  overflow: TextOverflow.ellipsis
                 ),
+                maxLines: 2,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: sortedItems.map((entry) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: Colors.primaries[
-                              items.keys.toList().indexOf(entry.key) %
-                                  Colors.primaries.length],
-                          borderRadius: BorderRadius.circular(2),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: PieChart(
+                    PieChartData(
+                      sections: pieSections,
+                      centerSpaceRadius: 20,
+                      sectionsSpace: 2,
+                      borderData: FlBorderData(show: false),
+                    ),
+                    swapAnimationDuration: const Duration(milliseconds: 150),
+                    swapAnimationCurve: Curves.linear, //
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: sortedItems.map((entry) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.primaries[
+                                items.keys.toList().indexOf(entry.key) %
+                                    Colors.primaries.length],
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${entry.key.toString().toUpperCase()} (${entry.value})',
-                        style: const TextStyle(
-                          fontFamily: "Nunito",
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF151515),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${entry.key.toString().toUpperCase()} (${entry.value})',
+                          style: const TextStyle(
+                            fontFamily: "Nunito",
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF151515),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-            ],
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
         ),
       ],

@@ -66,75 +66,91 @@ class LineChartComponent extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: LineChart(
-            LineChartData(
-              lineBarsData: [
-                LineChartBarData(
-                    spots: spots,
-                    isCurved: true,
-                    color: const Color(0xFF00935F),
-                    barWidth: 4,
-                    isStrokeCapRound: true,
-                    dotData: const FlDotData(show: true),
-                    belowBarData: BarAreaData(show: true)),
-              ],
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(color: Colors.grey),
+          child: Visibility(
+            visible: nfses.isNotEmpty,
+            replacement: const Center(
+              child: Text(
+                "Sem gráficos para esse período",
+                style: TextStyle(
+                  fontFamily: "Nunito",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF00935F),
+                  overflow: TextOverflow.ellipsis
+                ),
+                maxLines: 2,
               ),
-              gridData: const FlGridData(
-                show: true,
-                drawHorizontalLine: true,
-                drawVerticalLine: false,
-              ),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      int index = value.toInt();
-                      if (index >= 0 && index < dates.length) {
-                        return SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          child: Text(
-                            dates[index],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              overflow: TextOverflow.ellipsis,
+            ),
+            child: LineChart(
+              LineChartData(
+                lineBarsData: [
+                  LineChartBarData(
+                      spots: spots,
+                      isCurved: true,
+                      color: const Color(0xFF00935F),
+                      barWidth: 4,
+                      isStrokeCapRound: true,
+                      dotData: const FlDotData(show: true),
+                      belowBarData: BarAreaData(show: true)),
+                ],
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: Colors.grey),
+                ),
+                gridData: const FlGridData(
+                  show: true,
+                  drawHorizontalLine: true,
+                  drawVerticalLine: false,
+                ),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        int index = value.toInt();
+                        if (index >= 0 && index < dates.length) {
+                          return SideTitleWidget(
+                            axisSide: meta.axisSide,
+                            child: Text(
+                              dates[index],
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 2,
                             ),
-                            maxLines: 2,
-                          ),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                    interval: 1,
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                      interval: 1,
+                    ),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
                   ),
                 ),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-              ),
-              minX: 0,
-              maxX: (spots.length - 1).toDouble(),
-              minY: 0,
-              lineTouchData: LineTouchData(
-                touchTooltipData: LineTouchTooltipData(
-                  getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                    return touchedSpots.map((spot) {
-                      final formattedValue = NumberFormat.currency(
-                        locale: 'pt_BR',
-                        symbol: 'R\$',
-                      ).format(spot.y);
-                      return LineTooltipItem(
-                        formattedValue,
-                        const TextStyle(color: Colors.white),
-                      );
-                    }).toList();
-                  },
+                minX: 0,
+                maxX: (spots.length - 1).toDouble(),
+                minY: 0,
+                lineTouchData: LineTouchData(
+                  touchTooltipData: LineTouchTooltipData(
+                    getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                      return touchedSpots.map((spot) {
+                        final formattedValue = NumberFormat.currency(
+                          locale: 'pt_BR',
+                          symbol: 'R\$',
+                        ).format(spot.y);
+                        return LineTooltipItem(
+                          formattedValue,
+                          const TextStyle(color: Colors.white),
+                        );
+                      }).toList();
+                    },
+                  ),
                 ),
               ),
             ),

@@ -85,7 +85,13 @@ class _HomePageState extends State<HomePage> {
                     width: 0.25,
                     isSelectCard: true,
                     selectOptions: store.periodoSelection,
-                    onSelect: (value) {},
+                    onSelect: (value) {
+                      if(value == "Personalizado") {
+
+                      } else {
+                        store.filtrarPorData(periodo: value);
+                      }
+                    },
                   ),
                   SizedBox(width: screenSize.width * 0.01),
                   InfoCardComponent(

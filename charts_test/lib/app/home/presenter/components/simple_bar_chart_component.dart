@@ -24,7 +24,7 @@ class SimpleBarChartComponent extends StatelessWidget {
           barRods: [
             BarChartRodData(
               toY: total,
-              color: Colors.blue,
+              color: const Color(0xFF00935F),
             ),
           ],
         ),
@@ -62,46 +62,62 @@ class SimpleBarChartComponent extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: BarChart(
-            BarChartData(
-              barGroups: barGroups,
-              borderData: FlBorderData(show: false),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      final index = value.toInt();
-                      if (index >= 0 && index < totalPorEmitente.length) {
-                        final emitente = totalPorEmitente.keys.elementAt(index);
-                        return SideTitleWidget(
-                          angle: 0.2,
-                          space: 2,
-                          axisSide: meta.axisSide,
-                          child: Text(
-                            truncateToThreeWords(emitente),
-                            style: const TextStyle(
-                              fontSize: 8,
-                              fontFamily: 'Nunito',
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFF151515),
-                              overflow: TextOverflow.ellipsis,
+          child: Visibility(
+            visible: totalPorEmitente.isNotEmpty,
+            replacement: const Center(
+              child: Text(
+                "Sem gráficos para esse período",
+                style: TextStyle(
+                  fontFamily: "Nunito",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF00935F),
+                  overflow: TextOverflow.ellipsis
+                ),
+                maxLines: 2,
+              ),
+            ),
+            child: BarChart(
+              BarChartData(
+                barGroups: barGroups,
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (double value, TitleMeta meta) {
+                        final index = value.toInt();
+                        if (index >= 0 && index < totalPorEmitente.length) {
+                          final emitente = totalPorEmitente.keys.elementAt(index);
+                          return SideTitleWidget(
+                            angle: 0.2,
+                            space: 2,
+                            axisSide: meta.axisSide,
+                            child: Text(
+                              truncateToThreeWords(emitente),
+                              style: const TextStyle(
+                                fontSize: 8,
+                                fontFamily: 'Nunito',
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF151515),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
                             ),
-                            maxLines: 1,
-                          ),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
+              swapAnimationDuration: const Duration(
+                milliseconds: 150,
+              ),
+              swapAnimationCurve: Curves.linear,
             ),
-            swapAnimationDuration: const Duration(
-              milliseconds: 150,
-            ),
-            swapAnimationCurve: Curves.linear,
           ),
         ),
       ],
