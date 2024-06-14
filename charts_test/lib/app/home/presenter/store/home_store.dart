@@ -41,7 +41,7 @@ class HomeStore extends ChangeNotifier {
     filteredNfses = nfses;
 
     updateChartsMaps();
-    updateAndSortLists();
+    updateAndSortLists(updateCentroCustoSelection: true);
     updateTotalGasto();
     updateCurrentPeriodo();
   }
@@ -74,7 +74,7 @@ class HomeStore extends ChangeNotifier {
     }
   }
 
-  void updateAndSortLists() {
+  void updateAndSortLists({bool? updateCentroCustoSelection}) {
     sortedFornecedores = fornecedores.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     sortedSituacoes = situacoes.entries.toList()
@@ -83,10 +83,13 @@ class HomeStore extends ChangeNotifier {
       ..sort((a, b) => b.value.compareTo(a.value));
     sortedStatus = status.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    centrosCustoSelection = centrosCusto.entries.map((centroCusto) {
-      return centroCusto.key;
-    }).toList()
-      ..add("TODOS");
+    
+    if (updateCentroCustoSelection == true) {
+      centrosCustoSelection = centrosCusto.entries.map((centroCusto) {
+        return centroCusto.key;
+      }).toList()
+        ..add("TODOS");
+    }
 
     for (var nfse in filteredNfses) {
       if (!dates.contains(nfse.data)) {
@@ -109,7 +112,6 @@ class HomeStore extends ChangeNotifier {
   }
 
   void update() {
-    clearLists();
     updateChartsMaps();
     updateAndSortLists();
     updateTotalGasto();
@@ -121,9 +123,9 @@ class HomeStore extends ChangeNotifier {
       filteredNfses = nfses;
       clearLists();
       centrosCusto.clear();
-      updateChartsMaps();
-      updateAndSortLists();
-      updateTotalGasto();
+      update(
+        
+      );
       updateCurrentPeriodo();
     } else {
       currentCentroCusto = centroCusto;
@@ -131,9 +133,7 @@ class HomeStore extends ChangeNotifier {
         return nfse.centroCustoId.fantasia == centroCusto;
       }).toList();
       clearLists();
-      updateChartsMaps();
-      updateAndSortLists();
-      updateTotalGasto();
+      update();
       updateCurrentPeriodo();
     }
     notifyListeners();
@@ -150,12 +150,14 @@ class HomeStore extends ChangeNotifier {
       final dataInicio = DateTime(now.year, now.month, now.day, 0, 0, 0);
       final dataFinal = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
-      filteredNfses.clear();
       filteredNfses = nfses.where((nfse) {
         return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
       }).toList();
-      currentPeriodoSelection = "Hoje";
+      clearLists();
+      centrosCusto.clear();
+
       update();
+      currentPeriodoSelection = periodo;
 
       notifyListeners();
     }
@@ -168,11 +170,14 @@ class HomeStore extends ChangeNotifier {
       final dataFinal =
           DateTime(ontem.year, ontem.month, ontem.day, 23, 59, 59);
 
-      filteredNfses.clear();
       filteredNfses = nfses.where((nfse) {
         return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
       }).toList();
-      currentPeriodoSelection = "Ontem";
+      clearLists();
+      centrosCusto.clear();
+
+      update();
+      currentPeriodoSelection = periodo;
 
       notifyListeners();
     }
@@ -183,11 +188,14 @@ class HomeStore extends ChangeNotifier {
       final dataInicio = now.subtract(const Duration(days: 7));
       final dataFinal = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
-      filteredNfses.clear();
       filteredNfses = nfses.where((nfse) {
         return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
       }).toList();
-      currentPeriodoSelection = "Nos últimos 7 dias";
+      clearLists();
+      centrosCusto.clear();
+
+      update();
+      currentPeriodoSelection = periodo;
 
       notifyListeners();
     }
@@ -198,11 +206,27 @@ class HomeStore extends ChangeNotifier {
       final dataInicio = DateTime(now.year, now.month - 1, now.day);
       final dataFinal = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
-      filteredNfses.clear();
-      filteredNfses = nfses.where((nfse) {
-        return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
-      }).toList();
-      currentPeriodoSelection = "Nos últimos 30 dias";
+      if (currentCentroCusto == "TODOS") {
+        filteredNfses = nfses.where(
+          (nfse) {
+            return nfse.data.isAfter(dataInicio) &&
+                nfse.data.isBefore(dataFinal);
+          },
+        ).toList();
+      } else {
+        filteredNfses = nfses.where(
+          (nfse) {
+            return nfse.data.isAfter(dataInicio) &&
+                nfse.data.isBefore(dataFinal) &&
+                nfse.centroCustoId.fantasia == currentCentroCusto;
+          },
+        ).toList();
+      }
+
+      clearLists();
+      centrosCusto.clear();
+      update();
+      currentPeriodoSelection = periodo;
 
       notifyListeners();
     }

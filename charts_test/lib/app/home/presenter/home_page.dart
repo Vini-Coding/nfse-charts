@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     selectOptions: store.periodoSelection,
                     onSelect: (value) {
                       if(value == "Personalizado") {
-
+                        
                       } else {
                         store.filtrarPorData(periodo: value);
                       }
