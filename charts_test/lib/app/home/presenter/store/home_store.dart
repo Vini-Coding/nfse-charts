@@ -11,17 +11,17 @@ class HomeStore extends ChangeNotifier {
 
   late final List<Nfse> nfses;
   late List<Nfse> filteredNfses;
-  final Map<String, int> fornecedores = {};
-  final Map<String, int> situacoes = {};
-  final Map<String, int> centrosCusto = {};
-  final Map<String, int> status = {};
-  final Map<String, double> totalPorEmitente = {};
+  Map<String, int> fornecedores = {};
+  Map<String, int> situacoes = {};
+  Map<String, int> centrosCusto = {};
+  Map<String, int> status = {};
+  Map<String, double> totalPorEmitente = {};
   late List<MapEntry> sortedFornecedores;
   late List<MapEntry> sortedSituacoes;
   late List<MapEntry> sortedCentroCusto;
   late List<MapEntry> sortedStatus;
   double totalGasto = 0;
-  List<String> dates = [];
+  List<DateTime> dates = [];
   String currentCentroCusto = "TODOS";
   List<String> centrosCustoSelection = ["TODOS"];
   String currentPeriodoSelection = "";
@@ -43,7 +43,8 @@ class HomeStore extends ChangeNotifier {
     updateChartsMaps();
     sortLists();
     updateTotalGasto();
-    currentPeriodoSelection = "até ${dates.last}";
+    currentPeriodoSelection =
+        "até ${DateFormat('dd/MM/yyyy').format(dates.last)}";
   }
 
   void updateTotalGasto() {
@@ -84,11 +85,11 @@ class HomeStore extends ChangeNotifier {
       ..add("TODOS");
 
     for (var nfse in nfses) {
-      final formattedDate = DateFormat('dd/MM/yy').format(nfse.data);
-      if (!dates.contains(formattedDate)) {
-        dates.add(formattedDate);
+      if (!dates.contains(nfse.data)) {
+        dates.add(nfse.data);
       }
     }
+    dates.sort((a, b) => a.compareTo(b));
   }
 
   void clearLists() {
@@ -126,15 +127,99 @@ class HomeStore extends ChangeNotifier {
   }
 
   void filtrarPorData({
-    required DateTime dataInicio,
-    required DateTime dataFinal,
+    required String periodo,
+    DateTime? dataInicio,
+    DateTime? dataFinal,
   }) {
-    try {
+    // HOJE
+    void filtrarPorHoje() {
+      final now = DateTime.now();
+      final dataInicio = DateTime(now.year, now.month, now.day, 0, 0, 0);
+      final dataFinal = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+      filteredNfses.clear();
       filteredNfses = nfses.where((nfse) {
         return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
       }).toList();
-    } catch (e) {
-      throw Exception("Erro em filtrar por data: ${e.toString()}");
+
+      notifyListeners();
+    }
+
+    // ONTEM
+    void filtrarPorOntem() {
+      final now = DateTime.now();
+      final ontem = now.subtract(const Duration(days: 1));
+      final dataInicio = DateTime(ontem.year, ontem.month, ontem.day, 0, 0, 0);
+      final dataFinal =
+          DateTime(ontem.year, ontem.month, ontem.day, 23, 59, 59);
+
+      filteredNfses.clear();
+      filteredNfses = nfses.where((nfse) {
+        return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
+      }).toList();
+
+      notifyListeners();
+    }
+
+    //NOS ÚLTIMOS 7 DIAS
+    void filtrarPorUmaSemana() {
+      final now = DateTime.now();
+      final dataInicio = now.subtract(const Duration(days: 7));
+      final dataFinal = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+      filteredNfses.clear();
+      filteredNfses = nfses.where((nfse) {
+        return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
+      }).toList();
+
+      notifyListeners();
+    }
+
+    //NOS ÚLTIMOS 30 DIAS
+    void filtrarPorUmMes() {
+      final now = DateTime.now();
+      final dataInicio = DateTime(now.year, now.month - 1, now.day);
+      final dataFinal = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+      filteredNfses.clear();
+      filteredNfses = nfses.where((nfse) {
+        return nfse.data.isAfter(dataInicio) && nfse.data.isBefore(dataFinal);
+      }).toList();
+
+      notifyListeners();
+    }
+
+    void filtrarPersonalizado() {
+      try {
+        filteredNfses = nfses.where((nfse) {
+          return nfse.data.isAfter(dataInicio!) &&
+              nfse.data.isBefore(dataFinal!);
+        }).toList();
+      } catch (e) {
+        throw Exception("Erro em filtrar por data: ${e.toString()}");
+      }
+
+      notifyListeners();
+    }
+
+    switch (periodo) {
+      case "Hoje":
+        filtrarPorHoje();
+        break;
+      case "Ontem":
+        filtrarPorOntem();
+        break;
+      case "Nos últimos 7 dias":
+        filtrarPorUmaSemana();
+        break;
+      case "No último mês":
+        filtrarPorUmMes();
+        break;
+      case "Personalizado":
+        filtrarPersonalizado();
+        break;
+      default:
+        throw Exception("Período de filtro não reconhecido: $periodo");
     }
 
     notifyListeners();

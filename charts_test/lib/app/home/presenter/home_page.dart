@@ -2,6 +2,7 @@ import 'package:charts_test/app/home/presenter/components/pie_chart_component.da
 import 'package:charts_test/app/home/presenter/store/home_store.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'components/info_card_component.dart';
 import 'components/line_chart_component.dart';
@@ -95,8 +96,10 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(width: screenSize.width * 0.01),
                   InfoCardComponent(
                     title: "Total gasto:",
-                    subtitle:
-                        "R\$ ${store.totalGasto.toStringAsFixed(2).replaceAll('.', ',')}",
+                    subtitle: NumberFormat.currency(
+                      locale: 'pt_BR',
+                      symbol: 'R\$',
+                    ).format(store.totalGasto),
                     icon: FontAwesomeIcons.coins,
                   ),
                 ],
@@ -130,6 +133,14 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(height: screenSize.height * 0.02),
+              LineChartComponent(
+                title: "Evolução de compras por período",
+                nfses: store.filteredNfses,
+                dates: store.dates.map((date) {
+                  return DateFormat('dd/MM/yy').format(date);
+                }).toList(),
+              ),
+              SizedBox(height: screenSize.height * 0.02),
               Row(
                 children: [
                   Expanded(
@@ -150,12 +161,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-              ),
-              SizedBox(height: screenSize.height * 0.02),
-              LineChartComponent(
-                title: "Evolução de compras por período",
-                nfses: store.filteredNfses,
-                dates: store.dates,
               ),
               SizedBox(height: screenSize.height * 0.02),
               SimpleBarChartComponent(

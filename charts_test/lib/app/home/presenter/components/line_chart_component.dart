@@ -1,6 +1,6 @@
-import 'package:charts_test/app/home/models/nfse.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LineChartComponent extends StatelessWidget {
   final String title;
@@ -16,12 +16,33 @@ class LineChartComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    nfses.sort((a, b) => a.data.compareTo(b.data));
 
-    final List<FlSpot> spots = nfses.asMap().entries.map((entry) {
+    // Agrupar gastos por data
+    Map<DateTime, double> groupedData = {};
+    for (var nfse in nfses) {
+      DateTime dateKey =
+          DateTime(nfse.data.year, nfse.data.month, nfse.data.day);
+      if (groupedData.containsKey(dateKey)) {
+        groupedData[dateKey] = groupedData[dateKey]! + nfse.totalNf;
+      } else {
+        groupedData[dateKey] = nfse.totalNf;
+      }
+    }
+
+    // Ordenar os dados por data
+    List<MapEntry<DateTime, double>> sortedEntries =
+        groupedData.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
+
+    // Criar os pontos para o gráfico
+    final List<FlSpot> spots = sortedEntries.asMap().entries.map((entry) {
       int index = entry.key;
-      Nfse nfse = entry.value;
-      return FlSpot(index.toDouble(), nfse.totalNf);
+      double totalGasto = entry.value.value;
+      return FlSpot(index.toDouble(), totalGasto);
+    }).toList();
+
+    // Criar lista de datas para os títulos do eixo x
+    final List<String> dates = sortedEntries.map((entry) {
+      return DateFormat('dd/MM/yyyy').format(entry.key);
     }).toList();
 
     return Column(
@@ -49,14 +70,13 @@ class LineChartComponent extends StatelessWidget {
             LineChartData(
               lineBarsData: [
                 LineChartBarData(
-                  spots: spots,
-                  isCurved: true,
-                  color: Colors.blue,
-                  barWidth: 4,
-                  isStrokeCapRound: true,
-                  dotData: const FlDotData(show: true),
-                  belowBarData: BarAreaData(show: false),
-                ),
+                    spots: spots,
+                    isCurved: true,
+                    color: const Color(0xFF00935F),
+                    barWidth: 4,
+                    isStrokeCapRound: true,
+                    dotData: const FlDotData(show: true),
+                    belowBarData: BarAreaData(show: true)),
               ],
               borderData: FlBorderData(
                 show: true,
@@ -101,6 +121,22 @@ class LineChartComponent extends StatelessWidget {
               minX: 0,
               maxX: (spots.length - 1).toDouble(),
               minY: 0,
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      final formattedValue = NumberFormat.currency(
+                        locale: 'pt_BR',
+                        symbol: 'R\$',
+                      ).format(spot.y);
+                      return LineTooltipItem(
+                        formattedValue,
+                        const TextStyle(color: Colors.white),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
             ),
           ),
         ),
