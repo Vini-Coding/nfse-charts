@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GeneralTextFieldComponent extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;
   final void Function()? onSuffixPressed;
+
   const GeneralTextFieldComponent({
     super.key,
     required this.textEditingController,
@@ -31,7 +33,7 @@ class GeneralTextFieldComponent extends StatelessWidget {
               topLeft: Radius.circular(10),
               bottomLeft: Radius.circular(10),
             )),
-            child: TextField(
+            child: TextFormField(
               controller: textEditingController,
               keyboardType: TextInputType.datetime,
               style: const TextStyle(

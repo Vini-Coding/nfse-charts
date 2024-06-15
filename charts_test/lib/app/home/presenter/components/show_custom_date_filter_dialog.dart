@@ -13,18 +13,36 @@ Future<void> showCustomDateFilterDialog(
     context: context,
     builder: (BuildContext dialogContext) {
       final Size screenSize = MediaQuery.of(dialogContext).size;
+      final formKey = GlobalKey<FormState>();
+
       final TextEditingController dataInicialTextController =
           TextEditingController();
       final TextEditingController dataFinalTextController =
           TextEditingController();
 
-      DateTime convertStringToDate(String dateString) {
+      DateTime? convertStringToDate(String dateString) {
         final DateFormat formatter = DateFormat('dd/MM/yyyy');
-        return formatter.parse(dateString);
+        return formatter.tryParse(dateString);
+      }
+
+      String? validate() {
+        if (dataInicialTextController.text.isEmpty) {
+          return "Insira uma data inicial!";
+        } else if (dataFinalTextController.text.isEmpty) {
+          return "Insira uma data final!";
+        } else if (convertStringToDate(dataInicialTextController.text) ==
+            null) {
+          return "Insira uma data inicial válida!";
+        } else if (convertStringToDate(dataFinalTextController.text) == null) {
+          return "Insira uma data final válida!";
+        } else {
+          return null;
+        }
       }
 
       Future<void> showDatePickerDialog(
-          TextEditingController controller) async {
+        TextEditingController controller,
+      ) async {
         final DateTime? picked = await showDatePicker(
           context: dialogContext,
           initialDate: DateTime.now(),
@@ -79,60 +97,91 @@ Future<void> showCustomDateFilterDialog(
         ),
         content: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: screenSize.height * 0.02),
-              const Text(
-                "Data inicial para filtragem",
-                style: TextStyle(
-                  fontFamily: "Nunito",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF151515),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: screenSize.height * 0.02),
+                const Text(
+                  "Data inicial para filtragem",
+                  style: TextStyle(
+                    fontFamily: "Nunito",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF151515),
+                  ),
                 ),
-              ),
-              SizedBox(height: screenSize.height * 0.02),
-              GeneralTextFieldComponent(
-                hintText: "Digite a data inicial",
-                textEditingController: dataInicialTextController,
-                onSuffixPressed: () => showDatePickerDialog(
-                  dataInicialTextController,
+                SizedBox(height: screenSize.height * 0.02),
+                GeneralTextFieldComponent(
+                  hintText: "Digite a data inicial",
+                  textEditingController: dataInicialTextController,
+                  onSuffixPressed: () => showDatePickerDialog(
+                    dataInicialTextController,
+                  ),
                 ),
-              ),
-              SizedBox(height: screenSize.height * 0.02),
-              const Text(
-                "Data final para filtragem",
-                style: TextStyle(
-                  fontFamily: "Nunito",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF151515),
+                SizedBox(height: screenSize.height * 0.02),
+                const Text(
+                  "Data final para filtragem",
+                  style: TextStyle(
+                    fontFamily: "Nunito",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF151515),
+                  ),
                 ),
-              ),
-              SizedBox(height: screenSize.height * 0.02),
-              GeneralTextFieldComponent(
-                hintText: "Digite a data final",
-                textEditingController: dataFinalTextController,
-                onSuffixPressed: () => showDatePickerDialog(
-                  dataFinalTextController,
+                SizedBox(height: screenSize.height * 0.02),
+                GeneralTextFieldComponent(
+                  hintText: "Digite a data final",
+                  textEditingController: dataFinalTextController,
+                  onSuffixPressed: () => showDatePickerDialog(
+                    dataFinalTextController,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         actions: [
           GeneralTextButtonComponent(
             text: "Filtrar",
             onTap: () {
-              Navigator.pop(context);
-              store.filtrarPorData(
-                periodo: "Personalizado",
-                dataInicio: convertStringToDate(dataInicialTextController.text),
-                dataFinal: convertStringToDate(dataFinalTextController.text),
-              );
+              if (validate() != null) {
+                ScaffoldMessenger.of(dialogContext).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        FaIcon(
+                          FontAwesomeIcons.circleExclamation,
+                          color: Colors.white,
+                          size: screenSize.width * 0.015,
+                        ),
+                        SizedBox(width: screenSize.width * 0.02),
+                        Text(
+                          validate()!,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: const Color(0xFFF44336),
+                  ),
+                );
+              } else {
+                Navigator.pop(context);
+                store.filtrarPorData(
+                  periodo: "Personalizado",
+                  dataInicio:
+                      convertStringToDate(dataInicialTextController.text),
+                  dataFinal: convertStringToDate(dataFinalTextController.text),
+                );
+              }
             },
           ),
         ],
