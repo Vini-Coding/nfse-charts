@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SimpleBarChartComponent extends StatelessWidget {
   final String title;
@@ -68,12 +69,11 @@ class SimpleBarChartComponent extends StatelessWidget {
               child: Text(
                 "Sem gráficos para esse período",
                 style: TextStyle(
-                  fontFamily: "Nunito",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF00935F),
-                  overflow: TextOverflow.ellipsis
-                ),
+                    fontFamily: "Nunito",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF00935F),
+                    overflow: TextOverflow.ellipsis),
                 maxLines: 2,
               ),
             ),
@@ -88,7 +88,8 @@ class SimpleBarChartComponent extends StatelessWidget {
                       getTitlesWidget: (double value, TitleMeta meta) {
                         final index = value.toInt();
                         if (index >= 0 && index < totalPorEmitente.length) {
-                          final emitente = totalPorEmitente.keys.elementAt(index);
+                          final emitente =
+                              totalPorEmitente.keys.elementAt(index);
                           return SideTitleWidget(
                             angle: 0.2,
                             space: 2,
@@ -110,6 +111,23 @@ class SimpleBarChartComponent extends StatelessWidget {
                         }
                       },
                     ),
+                  ),
+                ),
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      final formattedValue = NumberFormat.currency(
+                        locale: 'pt_BR',
+                        symbol: 'R\$',
+                      ).format(rod.toY);
+                      return BarTooltipItem(
+                        formattedValue,
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:charts_test/app/home/presenter/components/pie_chart_component.dart';
+import 'package:charts_test/app/home/presenter/components/show_custom_date_filter_dialog.dart';
 import 'package:charts_test/app/home/presenter/store/home_store.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                   text: "Dashboard de\n",
                   style: TextStyle(
                     fontFamily: "Nunito",
-                    fontSize: 15,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF151515),
                   ),
@@ -85,9 +86,9 @@ class _HomePageState extends State<HomePage> {
                     width: 0.25,
                     isSelectCard: true,
                     selectOptions: store.periodoSelection,
-                    onSelect: (value) {
-                      if(value == "Personalizado") {
-                        
+                    onSelect: (value) async {
+                      if (value == "Personalizado") {
+                        await showCustomDateFilterDialog(context, store);
                       } else {
                         store.filtrarPorData(periodo: value);
                       }
