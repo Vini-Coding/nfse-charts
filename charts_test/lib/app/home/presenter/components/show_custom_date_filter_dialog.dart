@@ -2,6 +2,7 @@ import 'package:charts_test/app/home/presenter/components/general_text_button_co
 import 'package:charts_test/app/home/presenter/components/general_text_field_component.dart';
 import 'package:charts_test/app/home/presenter/store/home_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -15,10 +16,10 @@ Future<void> showCustomDateFilterDialog(
       final Size screenSize = MediaQuery.of(dialogContext).size;
       final formKey = GlobalKey<FormState>();
 
-      final TextEditingController dataInicialTextController =
-          TextEditingController();
-      final TextEditingController dataFinalTextController =
-          TextEditingController();
+      final MaskedTextController dataInicialTextController =
+          MaskedTextController(mask: '00/00/0000');
+      final MaskedTextController dataFinalTextController =
+          MaskedTextController(mask: '00/00/0000');
 
       DateTime? convertStringToDate(String dateString) {
         final DateFormat formatter = DateFormat('dd/MM/yyyy');
@@ -26,15 +27,15 @@ Future<void> showCustomDateFilterDialog(
       }
 
       String? validate() {
-        if (dataInicialTextController.text.isEmpty) {
-          return "Insira uma data inicial!";
-        } else if (dataFinalTextController.text.isEmpty) {
-          return "Insira uma data final!";
-        } else if (convertStringToDate(dataInicialTextController.text) ==
-            null) {
-          return "Insira uma data inicial válida!";
-        } else if (convertStringToDate(dataFinalTextController.text) == null) {
-          return "Insira uma data final válida!";
+        if (dataInicialTextController.text.isEmpty ||
+            convertStringToDate(dataInicialTextController.text) == null) {
+          return "Falha na operação, insira uma data inicial válida!";
+        } else if (dataFinalTextController.text.isEmpty ||
+            convertStringToDate(dataFinalTextController.text) == null) {
+          return "Falha na operação, insira uma data final válida!";
+        } else if (convertStringToDate(dataInicialTextController.text)!
+            .isAfter(convertStringToDate(dataFinalTextController.text)!)) {
+          return "A data inicial não pode ser mais recente que a data final!";
         } else {
           return null;
         }
@@ -48,6 +49,28 @@ Future<void> showCustomDateFilterDialog(
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(DateTime.now().year + 1),
+          cancelText: "Cancelar",
+          confirmText: "Confirmar",
+          locale: const Locale('pt', 'BR'),
+          switchToInputEntryModeIcon: const Icon(
+            Icons.keyboard,
+            color: Color(0xFF151515),
+            size: 20,
+          ),
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: const Color(0xFF00935F),
+                colorScheme: const ColorScheme.light(
+                  primary: Color(0xFF00935F),
+                ),
+                buttonTheme: const ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
         );
 
         if (picked != null) {
@@ -149,14 +172,15 @@ Future<void> showCustomDateFilterDialog(
             text: "Filtrar",
             onTap: () {
               if (validate() != null) {
-                ScaffoldMessenger.of(dialogContext).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    duration: const Duration(seconds: 5),
                     content: Row(
                       children: [
-                        FaIcon(
+                        const FaIcon(
                           FontAwesomeIcons.circleExclamation,
                           color: Colors.white,
-                          size: screenSize.width * 0.015,
+                          size: 20,
                         ),
                         SizedBox(width: screenSize.width * 0.02),
                         Text(
@@ -173,14 +197,15 @@ Future<void> showCustomDateFilterDialog(
                     backgroundColor: const Color(0xFFF44336),
                   ),
                 );
-              } else {
                 Navigator.pop(context);
+              } else {
                 store.filtrarPorData(
                   periodo: "Personalizado",
                   dataInicio:
                       convertStringToDate(dataInicialTextController.text),
                   dataFinal: convertStringToDate(dataFinalTextController.text),
                 );
+                Navigator.pop(context);
               }
             },
           ),
