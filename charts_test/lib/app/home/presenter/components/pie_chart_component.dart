@@ -1,3 +1,4 @@
+import 'package:charts_test/app/core/utils/generate_colors_util.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,10 @@ class _PieChartComponentState extends State<PieChartComponent> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final List<String> keys = widget.items.keys.toList();
-
+    final List<Color> customColors = generateColors(
+      const Color.fromARGB(255, 0, 164, 107),
+      keys.length,
+    );
 
     final List<PieChartSectionData> pieSections = widget.totalItems != 0
         ? widget.items.entries.map((entry) {
@@ -39,7 +43,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
             final int index = indexOfKey(entry.key, keys);
 
             return PieChartSectionData(
-              color: Colors.primaries[index % Colors.primaries.length],
+              color: customColors[index % Colors.primaries.length],
               value: entry.value.toDouble(),
               title: "${percentage.round()}%",
               showTitle: widget.showTitle,
@@ -127,20 +131,33 @@ class _PieChartComponentState extends State<PieChartComponent> {
                           width: 10,
                           height: 10,
                           decoration: BoxDecoration(
-                            color: Colors.primaries[
+                            color: customColors[
                                 widget.items.keys.toList().indexOf(entry.key) %
-                                    Colors.primaries.length],
+                                    customColors.length],
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           '${entry.key.toString().toUpperCase()} (${entry.value})',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: "Nunito",
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF151515),
+                            fontWeight: _touchedIndex ==
+                                    widget.items.keys
+                                        .toList()
+                                        .indexOf(entry.key)
+                                ? FontWeight.w900
+                                : FontWeight.w600,
+                            color: _touchedIndex ==
+                                    widget.items.keys
+                                        .toList()
+                                        .indexOf(entry.key)
+                                ? customColors[widget.items.keys
+                                        .toList()
+                                        .indexOf(entry.key) %
+                                    customColors.length]
+                                : const Color(0xFF151515),
                           ),
                         ),
                       ],
