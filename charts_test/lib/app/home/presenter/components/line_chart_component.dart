@@ -72,12 +72,11 @@ class LineChartComponent extends StatelessWidget {
               child: Text(
                 "Sem gráficos para esse período",
                 style: TextStyle(
-                  fontFamily: "Nunito",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF00935F),
-                  overflow: TextOverflow.ellipsis
-                ),
+                    fontFamily: "Nunito",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF00935F),
+                    overflow: TextOverflow.ellipsis),
                 maxLines: 2,
               ),
             ),
@@ -85,13 +84,32 @@ class LineChartComponent extends StatelessWidget {
               LineChartData(
                 lineBarsData: [
                   LineChartBarData(
-                      spots: spots,
-                      isCurved: true,
-                      color: const Color(0xFF00935F),
-                      barWidth: 4,
-                      isStrokeCapRound: true,
-                      dotData: const FlDotData(show: true),
-                      belowBarData: BarAreaData(show: true)),
+                    spots: spots,
+                    isCurved: true,
+                    color: const Color(0xFF00F29D),
+                    barWidth: 4,
+                    isStrokeCapRound: true,
+                    dotData: const FlDotData(show: true),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: const Color(0xFF00462E).withOpacity(0.7),
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF00462E).withOpacity(0.7),
+                          const Color(0xFF00462E).withOpacity(0.4),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                      spotsLine: const BarAreaSpotsLine(
+                        show: true,
+                        flLineStyle: FlLine(
+                          color: Color(0xFF00F29D),
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
                 borderData: FlBorderData(
                   show: true,
