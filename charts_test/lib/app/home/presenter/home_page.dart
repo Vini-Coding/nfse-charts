@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                     visible: store.currentCentroCusto == "TODOS",
                     child: Expanded(
                       child: PieChartComponent(
-                        title: "Notas fiscais por Centros de Custo",
+                        title: "Notas fiscais por centros de custo",
                         items: store.centrosCusto,
                         totalItems: nfsesTotalItems,
                         sortedItems: store.sortedCentroCusto,
@@ -175,6 +175,12 @@ class _HomePageState extends State<HomePage> {
                 totalPorEmitente: store.totalPorEmitente,
               ),
               SizedBox(height: screenSize.height * 0.02),
+              PieChartComponent(
+                title: "Ranking de matéria prima mais comprada",
+                items: store.materiasPrima,
+                totalItems: nfsesTotalItems,
+                sortedItems: store.sortedMateriasPrima,
+              ),
             ],
           ),
         ),

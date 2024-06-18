@@ -2,6 +2,7 @@ import 'package:charts_test/app/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../models/item/nfse_item.dart';
 import '../../models/nfse.dart';
 
 class HomeStore extends ChangeNotifier {
@@ -15,11 +16,13 @@ class HomeStore extends ChangeNotifier {
   Map<String, int> situacoes = {};
   Map<String, int> centrosCusto = {};
   Map<String, int> status = {};
+  Map<String, int> materiasPrima = {};
   Map<String, double> totalPorEmitente = {};
   late List<MapEntry> sortedFornecedores;
   late List<MapEntry> sortedSituacoes;
   late List<MapEntry> sortedCentroCusto;
   late List<MapEntry> sortedStatus;
+  late List<MapEntry> sortedMateriasPrima;
   double totalGasto = 0;
   List<DateTime> dates = [];
   String currentCentroCusto = "TODOS";
@@ -67,6 +70,10 @@ class HomeStore extends ChangeNotifier {
       centrosCusto[nfse.centroCustoId.fantasia] =
           (centrosCusto[nfse.centroCustoId.fantasia] ?? 0) + 1;
       status[nfse.status] = (status[nfse.status] ?? 0) + 1;
+      for (NfseItem item in nfse.itens) {
+        materiasPrima[item.materiaPrimaId.nome] =
+            (materiasPrima[item.materiaPrimaId.nome] ?? 0) + 1;
+      }
 
       // BAR CHARTS
       totalPorEmitente[nfse.nomeEmitente] =
@@ -82,6 +89,8 @@ class HomeStore extends ChangeNotifier {
     sortedCentroCusto = centrosCusto.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     sortedStatus = status.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    sortedMateriasPrima = materiasPrima.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     if (updateCentroCustoSelection == true) {
@@ -103,11 +112,13 @@ class HomeStore extends ChangeNotifier {
     fornecedores.clear();
     situacoes.clear();
     status.clear();
+    materiasPrima.clear();
     totalPorEmitente.clear();
     sortedFornecedores.clear();
     sortedSituacoes.clear();
     sortedCentroCusto.clear();
     sortedStatus.clear();
+    sortedMateriasPrima.clear();
     dates.clear();
   }
 
