@@ -231,6 +231,12 @@ class LineChartComponent extends StatelessWidget {
                 maxX: (spots.length - 1).toDouble(),
                 minY: 0,
                 lineTouchData: LineTouchData(
+                  mouseCursorResolver: (touchEvent, touchResponse) {
+                    if(touchResponse == null || touchResponse.lineBarSpots == null ) {
+                      return SystemMouseCursors.basic;
+                    }
+                    return SystemMouseCursors.click;
+                  },
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipColor: (touchedSpot) => const Color(0xFF00FFA6),
                     getTooltipItems: (List<LineBarSpot> touchedSpots) {

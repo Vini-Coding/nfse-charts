@@ -33,7 +33,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
     final Size screenSize = MediaQuery.of(context).size;
     final List<String> keys = widget.items.keys.toList();
     final List<Color> customColors = generateColors(
-      const Color.fromARGB(255, 0, 164, 107),
+      const Color(0xFF00A46B),
       keys.length,
     );
 

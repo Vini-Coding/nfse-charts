@@ -25,7 +25,16 @@ class SimpleBarChartComponent extends StatelessWidget {
           barRods: [
             BarChartRodData(
               toY: total,
-              color: const Color(0xFF00935F),
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF00FFA6),
+                  Color(0xFF00935F),
+                ],
+              ),
+              borderRadius: BorderRadius.zero,
+              width: 12,
             ),
           ],
         ),
@@ -80,11 +89,37 @@ class SimpleBarChartComponent extends StatelessWidget {
             child: BarChart(
               BarChartData(
                 barGroups: barGroups,
-                borderData: FlBorderData(show: false),
+                borderData: FlBorderData(
+                  show: false,
+                  border: Border.all(color: const Color(0xFF00935F)),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawHorizontalLine: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    return const FlLine(
+                      color: Color(0xFFCFF4E7),
+                    );
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return const FlLine(
+                      color: Color(0xFFCFF4E7),
+                    );
+                  },
+                ),
                 titlesData: FlTitlesData(
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: screenSize.height * 0.05,
+                      getTitlesWidget: (value, meta) => const SizedBox(),
+                    ),
+                  ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
+                      reservedSize: screenSize.height * 0.06,
                       getTitlesWidget: (double value, TitleMeta meta) {
                         final index = value.toInt();
                         if (index >= 0 && index < totalPorEmitente.length) {
@@ -99,8 +134,8 @@ class SimpleBarChartComponent extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 8,
                                 fontFamily: 'Nunito',
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF151515),
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFF00462E),
                                 overflow: TextOverflow.ellipsis,
                               ),
                               maxLines: 1,
@@ -112,9 +147,66 @@ class SimpleBarChartComponent extends StatelessWidget {
                       },
                     ),
                   ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: screenSize.width * 0.06,
+                      getTitlesWidget: (value, meta) {
+                        return SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            NumberFormat.currency(
+                              locale: 'pt_BR',
+                              symbol: 'R\$',
+                            ).format(value),
+                            style: const TextStyle(
+                              color: Color(0xFF00462E),
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 2,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: screenSize.width * 0.06,
+                      getTitlesWidget: (value, meta) {
+                        return SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            NumberFormat.currency(
+                              locale: 'pt_BR',
+                              symbol: 'R\$',
+                            ).format(value),
+                            style: const TextStyle(
+                              color: Color(0xFF00462E),
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 2,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 barTouchData: BarTouchData(
+                  mouseCursorResolver: (touchEvent, touchResponse) {
+                    if (touchResponse == null || touchResponse.spot == null) {
+                      return SystemMouseCursors.basic;
+                    }
+                    return SystemMouseCursors.click;
+                  },
                   touchTooltipData: BarTouchTooltipData(
+                    getTooltipColor: (touchedSpot) => const Color(0xFF00FFA6),
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       final formattedValue = NumberFormat.currency(
                         locale: 'pt_BR',
@@ -123,8 +215,9 @@ class SimpleBarChartComponent extends StatelessWidget {
                       return BarTooltipItem(
                         formattedValue,
                         const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF00462E),
                         ),
                       );
                     },
