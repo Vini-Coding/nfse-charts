@@ -37,7 +37,10 @@ class LineChartComponent extends StatelessWidget {
     final List<FlSpot> spots = sortedEntries.asMap().entries.map((entry) {
       int index = entry.key;
       double totalGasto = entry.value.value;
-      return FlSpot(index.toDouble(), totalGasto);
+      return FlSpot(
+        index.toDouble(),
+        totalGasto,
+      );
     }).toList();
 
     // Criar lista de datas para os títulos do eixo x
@@ -72,11 +75,12 @@ class LineChartComponent extends StatelessWidget {
               child: Text(
                 "Sem gráficos para esse período",
                 style: TextStyle(
-                    fontFamily: "Nunito",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF00935F),
-                    overflow: TextOverflow.ellipsis),
+                  fontFamily: "Nunito",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF00935F),
+                  overflow: TextOverflow.ellipsis,
+                ),
                 maxLines: 2,
               ),
             ),
@@ -86,13 +90,21 @@ class LineChartComponent extends StatelessWidget {
                   LineChartBarData(
                     spots: spots,
                     isCurved: true,
-                    color: const Color(0xFF00F29D),
-                    barWidth: 4,
+                    barWidth: 3,
                     isStrokeCapRound: true,
-                    dotData: const FlDotData(show: true),
+                    preventCurveOverShooting: true,
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (spot, percent, barData, index) {
+                        return FlDotCirclePainter(
+                          radius: 6,
+                          color: const Color(0xFF00FFA6),
+                        );
+                      },
+                    ),
+                    color: const Color(0xFF00FFA6),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: const Color(0xFF00462E).withOpacity(0.7),
                       gradient: LinearGradient(
                         colors: [
                           const Color(0xFF00462E).withOpacity(0.7),
@@ -104,7 +116,7 @@ class LineChartComponent extends StatelessWidget {
                       spotsLine: const BarAreaSpotsLine(
                         show: true,
                         flLineStyle: FlLine(
-                          color: Color(0xFF00F29D),
+                          color: Color(0xFF00FFA6),
                           strokeWidth: 2,
                         ),
                       ),
@@ -113,12 +125,22 @@ class LineChartComponent extends StatelessWidget {
                 ],
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: Colors.grey),
+                  border: Border.all(color: const Color(0xFF00462E)),
                 ),
-                gridData: const FlGridData(
+                gridData: FlGridData(
                   show: true,
                   drawHorizontalLine: true,
                   drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    return const FlLine(
+                      color: Color(0xFFCFF4E7),
+                    );
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return const FlLine(
+                      color: Color(0xFFCFF4E7),
+                    );
+                  },
                 ),
                 titlesData: FlTitlesData(
                   bottomTitles: AxisTitles(
@@ -132,9 +154,10 @@ class LineChartComponent extends StatelessWidget {
                             child: Text(
                               dates[index],
                               style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 10,
+                                color: Color(0xFF00935F),
+                                fontFamily: 'Nunito',
+                                fontWeight: FontWeight.w800,
+                                fontSize: 12,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               maxLines: 2,
@@ -147,8 +170,61 @@ class LineChartComponent extends StatelessWidget {
                       interval: 1,
                     ),
                   ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) => const SizedBox(),
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: screenSize.width * 0.06,
+                      getTitlesWidget: (value, meta) {
+                        return SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            NumberFormat.currency(
+                              locale: 'pt_BR',
+                              symbol: 'R\$',
+                            ).format(value),
+                            style: const TextStyle(
+                              color: Color(0xFF00462E),
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 2,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: screenSize.width * 0.06,
+                      getTitlesWidget: (value, meta) {
+                        return SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            NumberFormat.currency(
+                              locale: 'pt_BR',
+                              symbol: 'R\$',
+                            ).format(value),
+                            style: const TextStyle(
+                              color: Color(0xFF00462E),
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 2,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 minX: 0,
@@ -156,6 +232,7 @@ class LineChartComponent extends StatelessWidget {
                 minY: 0,
                 lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
+                    getTooltipColor: (touchedSpot) => const Color(0xFF00FFA6),
                     getTooltipItems: (List<LineBarSpot> touchedSpots) {
                       return touchedSpots.map((spot) {
                         final formattedValue = NumberFormat.currency(
@@ -164,7 +241,11 @@ class LineChartComponent extends StatelessWidget {
                         ).format(spot.y);
                         return LineTooltipItem(
                           formattedValue,
-                          const TextStyle(color: Colors.white),
+                          const TextStyle(
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF00462E),
+                          ),
                         );
                       }).toList();
                     },

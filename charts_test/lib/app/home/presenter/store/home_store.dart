@@ -12,6 +12,7 @@ class HomeStore extends ChangeNotifier {
 
   late final List<Nfse> nfses;
   late List<Nfse> filteredNfses;
+  List<NfseItem> filteredNfseItems = [];
   Map<String, int> fornecedores = {};
   Map<String, int> situacoes = {};
   Map<String, int> centrosCusto = {};
@@ -75,6 +76,9 @@ class HomeStore extends ChangeNotifier {
             (materiasPrima[item.materiaPrimaId.nome] ?? 0) + 1;
       }
 
+      // Nfse items
+      filteredNfseItems.addAll(nfse.itens);
+
       // BAR CHARTS
       totalPorEmitente[nfse.nomeEmitente] =
           (totalPorEmitente[nfse.nomeEmitente] ?? 0) + nfse.totalNf;
@@ -120,6 +124,7 @@ class HomeStore extends ChangeNotifier {
     sortedStatus.clear();
     sortedMateriasPrima.clear();
     dates.clear();
+    filteredNfseItems.clear();
   }
 
   void update() {

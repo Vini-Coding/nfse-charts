@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
               PieChartComponent(
                 title: "Ranking de matéria prima mais comprada",
                 items: store.materiasPrima,
-                totalItems: nfsesTotalItems,
+                totalItems: store.filteredNfseItems.length,
                 sortedItems: store.sortedMateriasPrima,
               ),
             ],
